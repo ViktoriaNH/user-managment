@@ -5,6 +5,13 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 
+
+console.log("Starting server...");
+console.log("PORT from env:", process.env.PORT);
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL ? "exists" : "MISSING");
+console.log("SUPABASE_SERVICE_ROLE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY ? "exists" : "MISSING");
+
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
@@ -319,4 +326,8 @@ app.get("/verify-email", async (req, res) => {
   }
 });
 
-app.listen(PORT);
+// app.listen(PORT);
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});

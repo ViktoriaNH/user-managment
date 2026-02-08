@@ -1,4 +1,4 @@
-import { checkNotBlocked } from "./checkNotblocked";
+import { checkNotBlocked } from "./checkNotBlocked";
 import { userActions } from "./userActions";
 
 // note: wrapper for user actions (block, delete, etc.)

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loadUsers } from "../services/users";
 import { handleActionEvent } from "../utils/handleActionEvent";
 import { runUserAction } from "../utils/runUserActions";
-import { checkNotBlocked } from "../utils/checkNotblocked";
+import { checkNotBlocked } from "../utils/checkNotBlocked";
 
 const useUsers = (delay = 2000) => {
   const [users, setUsers] = useState([]);

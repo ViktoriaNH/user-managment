@@ -5,7 +5,9 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 // note: general app setup
 const app = express();
@@ -88,7 +90,7 @@ const sendVerificationEmail = async (toEmail, rawToken) => {
 
   const info = await transporter.sendMail(mailOptions);
   return info;
-}
+};
 
 // important: need delete users from 2 tables in SB
 app.post("/delete-users", async (req, res) => {

@@ -2,12 +2,14 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AUTH_MODES } from "./data/auth-data.js";
 import Authorization from "./pages/Authorization/Authorization.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
-import { useEffect } from "react";
+import VerifyEmail from "./components/VerifyEmail/VerifyEmail.jsx";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
+
+      <Route path="/verify-email" element={<VerifyEmail />} />
 
       <Route
         path="/login"

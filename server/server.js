@@ -8,34 +8,34 @@ import dotenv from "dotenv";
 const isDev = process.env.NODE_ENV !== "production";
 if (isDev) dotenv.config();
 
-
 // note: general app setup
 const app = express();
 app.use(express.json());
 
 // note: CORS config
 const allowedOrigins = [
-  process.env.FRONTEND_URL,   
-  "http://localhost:5173",           
-  "http://localhost:3000",      
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+  "http://localhost:3000",
 ];
 
-app.use('*', cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
+app.use(
+  "*",
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`Not allowed by CORS: ${origin}`));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS', 'DELETE'], 
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
-;
-
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Not allowed by CORS: ${origin}`));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "OPTIONS", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 // note: supabase admin client
 const hasSupabase =
   !!process.env.SUPABASE_URL && !!process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -52,9 +52,8 @@ const supabaseAdmin =
 
 const EMAIL_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 const PORT = process.env.PORT || 3000;
-
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 // important: returns SHA-256 hex hash of a string token, use for secure token storage in supabse
 const hashToken = (token) => {
@@ -89,13 +88,14 @@ const transporter = nodemailer.createTransport({
   debug: true,
 });
 
-// note: unifed sending function, create link 
-const FRONTEND_URL = process.env.FRONTEND_URL;
-
+// note: unifed sending function, create link
 const sendVerificationEmail = async (toEmail, rawToken) => {
-  const verificationLink = `${FRONTEND_URL}/verify-email?token=${rawToken}`;
+  const link = new URL("/verify-email", FRONTEND_URL);
+  link.searchParams.set("token", rawToken);
 
-   const mailOptions = {
+  const verificationLink = link.toString();
+
+  const mailOptions = {
     from: `"My App" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject: "Confirm your email",
@@ -126,6 +126,12 @@ const sendVerificationEmail = async (toEmail, rawToken) => {
   return info;
 };
 
+// note: ащк еуыешта
+
+app.get("/health-check", (req, res) => {
+  console.log("Health-check route was called!");
+  res.json({ status: "ok" });
+});
 
 // note: create token, save hash in email_verifications
 app.post("/send-verification", async (req, res) => {
@@ -351,8 +357,6 @@ app.post("/delete-unverified", async (req, res) => {
     });
   }
 });
-
-
 
 // note: global error handler
 app.use((err, req, res, next) => {

@@ -91,7 +91,7 @@ const transporter = nodemailer.createTransport({
 
 // note: unifed sending function, create link to BACKEND_URL/verify-email (not FRONTEND)
 const sendVerificationEmail = async (toEmail, rawToken) => {
-  const verificationLink = `${BACKEND_URL}/verify-email?token=${rawToken}`;
+  const verificationLink = `${FRONTEND_URL}/verify-email?token=${rawToken}`;
 
    const mailOptions = {
     from: `"My App" <${process.env.EMAIL_USER}>`,

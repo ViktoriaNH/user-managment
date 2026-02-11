@@ -12,9 +12,16 @@ if (isDev) dotenv.config();
 const app = express();
 app.use(express.json());
 
+// note: general helpers
+
+const EMAIL_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+const PORT = process.env.PORT || 3000;
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 // note: CORS config
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  FRONTEND_URL,
   "http://localhost:5173",
   "http://localhost:3000",
 ];
@@ -48,12 +55,7 @@ const supabaseAdmin =
     )
   : null;
 
-// note: general helpers
 
-const EMAIL_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
-const PORT = process.env.PORT || 3000;
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 // important: returns SHA-256 hex hash of a string token, use for secure token storage in supabse
 const hashToken = (token) => {
@@ -212,11 +214,11 @@ app.get("/verify-email", async (req, res) => {
       .limit(1);
 
     if (error) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login?verified=0`);
+      return res.redirect(`${FRONTEND_URL}/login?verified=0`);
     }
 
     if (!rows || rows.length === 0) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login?verified=0`);
+      return res.redirect(`${FRONTEND_URL}/login?verified=0`);
     }
 
     const record = rows[0];
@@ -231,9 +233,9 @@ app.get("/verify-email", async (req, res) => {
       .update({ status: "active" })
       .eq("id", record.user_id);
 
-    res.redirect(`${process.env.FRONTEND_URL}/login?verified=1`);
+    res.redirect(`${FRONTEND_URL}/login?verified=1`);
   } catch (err) {
-    res.redirect(`${process.env.FRONTEND_URL}/login?verified=0`);
+    res.redirect(`${FRONTEND_URL}/login?verified=0`);
   }
 });
 

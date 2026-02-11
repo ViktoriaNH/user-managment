@@ -1,0 +1,27 @@
+{
+  "name": "@myscope/user-managment",
+  "version": "1.0.0",
+  "description": "A minimal, clean, and structured administration panel for managing users.\r The project demonstrates authentication, access control, and basic CRUD operations using Supabase as the backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViktoriaNH/user-managment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ViktoriaNH/user-managment/issues"
+  },
+  "homepage": "https://github.com/ViktoriaNH/user-managment#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "express": "^4.22.1"
+  }
+}

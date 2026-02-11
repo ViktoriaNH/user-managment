@@ -89,7 +89,9 @@ const transporter = nodemailer.createTransport({
   debug: true,
 });
 
-// note: unifed sending function, create link to BACKEND_URL/verify-email (not FRONTEND)
+// note: unifed sending function, create link 
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const sendVerificationEmail = async (toEmail, rawToken) => {
   const verificationLink = `${FRONTEND_URL}/verify-email?token=${rawToken}`;
 
@@ -124,12 +126,6 @@ const sendVerificationEmail = async (toEmail, rawToken) => {
   return info;
 };
 
-// note: for testing
-
-app.get('/health-check', (req, res) => {
-  console.log('Health-check route was called!');
-  res.json({ status: 'ok' });
-});
 
 // note: create token, save hash in email_verifications
 app.post("/send-verification", async (req, res) => {

@@ -27,14 +27,22 @@ export const checkStatusAndRedirect = async (
   if (check.reason === "no-user" || check.reason === "error") {
     setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]);
 
-    supabase.auth.setSession({ access_token: null, refresh_token: null });
+    try {
+      await supabase.auth.signOut({ scope: "local" });
+    } catch (e) {
+      console.log("signOut failed (but expected after deletion)", e);
+    }
+
     localStorage.removeItem(`sb-${PROJECT_REF}-auth-token`);
 
-    supabase.auth
-      .signOut()
-      .catch((e) => console.log("signOut failed (expected)", e));
+    supabase.auth.onAuthStateChange((_e, session) => {
+      if (!session) {
+        redirectToLogin(navigate, 800);
+      }
+    });
 
-    redirectToLogin(navigate, 800);
+    setTimeout(() => redirectToLogin(navigate, 800), 300);
+
     return;
   }
 };

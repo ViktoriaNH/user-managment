@@ -14,6 +14,8 @@ export const checkStatusAndRedirect = async (
     redirectToLogin(navigate, delay);
   };
 
+  const PROJECT_REF = "kxuqrtxvyyubnsunrcpg";
+
   if (check.ok) return;
 
   if (check.reason === "blocked") {
@@ -23,20 +25,16 @@ export const checkStatusAndRedirect = async (
   }
 
   if (check.reason === "no-user" || check.reason === "error") {
-    setAlert(
-      check.reason === "no-user" ?
-        ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]
-      : ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED] || "Ошибка авторизации",
-    );
+    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]);
 
-    try {
-      await supabase.auth.signOut({ scope: "global" }); //
-      await supabase.auth.getSession();
-    } catch (e) {
-      console.warn("Sign out failed:", e);
-    }
+    supabase.auth.setSession({ access_token: null, refresh_token: null });
+    localStorage.removeItem(`sb-${PROJECT_REF}-auth-token`);
 
-    setTimeout(doRedirect, 300);
+    supabase.auth
+      .signOut()
+      .catch((e) => console.log("signOut failed (expected)", e));
+
+    redirectToLogin(navigate, 800);
     return;
   }
 };

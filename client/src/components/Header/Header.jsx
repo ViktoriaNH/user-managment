@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
-import { redirectToLogin } from "../../utils/redirectToLogin";
+import { redirectToLogin } from "../../helpers/redirectToLogin";
+
 
 const Header = () => {
   const navigate = useNavigate();

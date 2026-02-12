@@ -77,3 +77,5 @@ export const getCurrentUserId = async () => {
   const { data } = await supabase.auth.getUser();
   return data?.user?.id;
 };
+
+

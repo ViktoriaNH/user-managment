@@ -1,6 +1,7 @@
 import { ACTION_EVENTS } from "../data/action-events";
 import { ACTION_MESSAGES } from "../data/action-messages";
 import { redirectToLogin } from "../helpers/redirectToLogin";
+import { supabase } from "../supabaseClient";
 import { checkUserStatus } from "./checkUserStatus";
 
 export const checkStatusAndRedirect = async (

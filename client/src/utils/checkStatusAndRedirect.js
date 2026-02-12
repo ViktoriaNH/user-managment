@@ -10,29 +10,33 @@ export const checkStatusAndRedirect = async (
 ) => {
   const check = await checkUserStatus();
 
+  const doRedirect = () => {
+    redirectToLogin(navigate, delay);
+  };
+
   if (check.ok) return;
 
   if (check.reason === "blocked") {
     setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_BLOCKED]);
-    redirectToLogin(navigate, delay);
+    doRedirect();
     return;
   }
 
-  if (check.reason === "no-user") {
-    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]);
-    // important: clear local supabase session so JWT is removed (otherwise 403 repeats)
+  if (check.reason === "no-user" || check.reason === "error") {
+    setAlert(
+      check.reason === "no-user" ?
+        ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]
+      : ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED] || "Ошибка авторизации",
+    );
+
     try {
-      await supabase.auth.signOut();
+      await supabase.auth.signOut({ scope: "global" }); //
+      await supabase.auth.getSession();
     } catch (e) {
-      console.warn("Sign out error:", e);
+      console.warn("Sign out failed:", e);
     }
-    redirectToLogin(navigate, delay);
-    return;
-  }
 
-  if (check.reason === "error") {
-    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED] || "Auth error");
-    await supabase.auth.signOut().catch(() => {});
-    redirectToLogin(navigate, delay);
+    setTimeout(doRedirect, 300);
+    return;
   }
 };

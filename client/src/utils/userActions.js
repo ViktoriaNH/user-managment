@@ -85,6 +85,8 @@ export const userActions = {
       await reload();
     }
 
-    return ACTION_EVENTS.UNVERIFIED_DELETED;
+    return isSelf ?
+        ACTION_EVENTS.SELF_DELETED
+      : ACTION_EVENTS.UNVERIFIED_DELETED;
   },
 };

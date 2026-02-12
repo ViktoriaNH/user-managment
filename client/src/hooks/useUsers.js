@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { loadUsers } from "../services/users";
 import { handleActionEvent } from "../utils/handleActionEvent";
 import { runUserAction } from "../utils/runUserActions";
-import { checkNotBlocked } from "../utils/checkNotBlocked";
+import { checkUserStatus } from "../utils/checkUserStatus";
+
 
 const useUsers = (delay = 2000) => {
   const [users, setUsers] = useState([]);
@@ -13,7 +14,7 @@ const useUsers = (delay = 2000) => {
 
   // note: check if current user is blocked, redirect if needed
   useEffect(() => {
-    checkNotBlocked(navigate, setAlert);
+    checkUserStatus(navigate, setAlert);
   }, [navigate]);
 
   // note: reload user list

@@ -6,21 +6,29 @@ export const getCurrentUserStatus = async () => {
   const currentUserId = await getCurrentUserId();
 
   // important: its not err if the supabase session not restore
-  // this "pending" / "waiting" state prevents redirect before auth is ready 
+  // this "pending" / "waiting" state prevents redirect before auth is ready
   if (!currentUserId) {
-  return { status: null, error: "pending", userId: null };
-}
+    return { status: null, error: "pending", userId: null };
+  }
 
+  // note: get data from users
   const { data, error } = await supabase
     .from("users")
     .select("status")
     .eq("id", currentUserId)
     .single();
 
-  // nota bene: error set if the user not found or fetch fails
-  if (error || !data) {
-    return { status: null, error: error || "no-data", userId: currentUserId };
-  }
+  // note: process the errors from supabase
+  if (error) {
+    const status = error?.status;
 
+    if (status === 401 || status === 403) {
+      return { status: null, error: "no-user", userId: currentUserId };
+    }
+    return { status: null, error: "other", userId: currentUserId };
+  }
+  if (!data) {
+    return { status: null, error: "no-user", userId: currentUserId };
+  }
   return { status: data.status, error: null, userId: currentUserId };
 };

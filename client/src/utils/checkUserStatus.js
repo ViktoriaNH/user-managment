@@ -1,10 +1,10 @@
 import { ACTION_EVENTS } from "../data/action-events";
 import { ACTION_MESSAGES } from "../data/action-messages";
 import { redirectToLogin } from "./redirectToLogin";
-import { getCurrentUserStatus } from "../utils/getCurrentUserStatus";
+import { getCurrentUserStatus } from "./getCurrentUserStatus";
 
 // note: check the current user is not blocked and exists.
-export const checkNotBlocked = async (
+export const checkUserStatus = async (
   navigate,
   setAlert = () => {},
   delay = 2000,
@@ -23,7 +23,7 @@ export const checkNotBlocked = async (
   }
 
   if (error) {
-    setAlert(ACTION_MESSAGEES[ACTION_EVENTS.SELF_DELETED]);
+    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]);
     await redirectToLogin(navigate, delay);
     return false;
   }

@@ -4,7 +4,7 @@ import { loadUsers } from "../services/users";
 import { handleActionEvent } from "../utils/handleActionEvent";
 import { runUserAction } from "../utils/runUserActions";
 import { checkStatusAndRedirect } from "../utils/checkStatusAndRedirect";
-
+import { checkUserStatus } from "../utils/checkUserStatus";
 
 const useUsers = (delay = 2000) => {
   const [users, setUsers] = useState([]);
@@ -15,14 +15,28 @@ const useUsers = (delay = 2000) => {
   // note: check if current user is blocked, redirect if needed
   useEffect(() => {
     checkStatusAndRedirect(navigate, setAlert);
+
+    const interval = setInterval(() => {
+      checkStatusAndRedirect(navigate, setAlert);
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, [navigate]);
 
   // note: reload user list
   const reload = useCallback(async () => {
+    const check = await checkUserStatus();
+
+    if (!check.ok) {
+      checkStatusAndRedirect(navigate, setAlert);
+      return;
+    }
     try {
       const data = await loadUsers();
       setUsers(data);
-    } catch (error) {}
+    } catch (error) {
+      setAlert?.("Failed to load list");
+    }
   }, []);
 
   // note: initial load

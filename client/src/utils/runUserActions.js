@@ -1,4 +1,3 @@
-
 import { checkUserStatus } from "./checkUserStatus";
 import { userActions } from "./userActions";
 
@@ -20,7 +19,8 @@ export const runUserAction =
 
     try {
       return await action({ ...context, selectedUsers });
-    } catch {
+    } catch (err) {
+      context.setAlert?.("Error while performing action");
       return undefined;
     }
   };

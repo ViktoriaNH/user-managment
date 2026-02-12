@@ -16,7 +16,6 @@ app.use(express.json());
 
 const EMAIL_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 const PORT = process.env.PORT || 3000;
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 // note: CORS config
@@ -54,8 +53,6 @@ const supabaseAdmin =
       process.env.SUPABASE_SERVICE_ROLE_KEY,
     )
   : null;
-
-
 
 // important: returns SHA-256 hex hash of a string token, use for secure token storage in supabse
 const hashToken = (token) => {

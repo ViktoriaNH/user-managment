@@ -6,7 +6,6 @@ export const sendVerification = async (userId, email) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, email }),
-    credentials: 'include',
   });
 
   // note: return response data on success

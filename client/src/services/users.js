@@ -75,7 +75,6 @@ export const deleteUsers = async (ids, currentEmail) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ ids, currentEmail }),
-    credentials: 'include',
   });
 
   const payload = await response.json();
@@ -104,7 +103,6 @@ export const deleteUnverifiedUsers = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ currentEmail }),
-    credentials: 'include',
   });
 
   const payload = await response.json();

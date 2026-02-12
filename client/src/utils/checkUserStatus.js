@@ -8,19 +8,15 @@ export const checkUserStatus = async () => {
     return { ok: true };
   }
 
-  if (
-    res.error === "no-user" ||
-    res.error === "other" ||           
-    !res.status                        
-  ) {
+  if (error === "no-user" || error === "other" || !status) {
     return { ok: false, reason: "no-user" };
   }
 
-  if (res.status === "blocked") {
+  if (status === "blocked") {
     return { ok: false, reason: "blocked" };
   }
 
-  if (res.error) {
+  if (error) {
     return { ok: false, reason: "error" };
   }
 

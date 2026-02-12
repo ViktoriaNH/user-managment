@@ -8,24 +8,16 @@ export const checkUserStatus = async () => {
     return { ok: true };
   }
 
-  const errorCode = error?.code;
-  const errorStatus = error?.status || error?.statusCode;
+  if (status === "blocked") {
+    return { ok: false, reason: "blocked" };
+  }
 
-  if (
-    error === "no-user" ||
-    errorCode === "user_not_found" ||
-    errorStatus === 401 ||
-    errorStatus === 403
-  ) {
+  if (error === "no-user") {
     return { ok: false, reason: "no-user" };
   }
 
   if (error) {
     return { ok: false, reason: "error" };
-  }
-
-  if (status === "blocked") {
-    return { ok: false, reason: "blocked" };
   }
 
   return { ok: true };

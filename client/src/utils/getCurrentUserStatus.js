@@ -20,15 +20,17 @@ export const getCurrentUserStatus = async () => {
 
   // note: process the errors from supabase
   if (error) {
-    const status = error?.status;
+    const code = error?.code ?? error?.status ?? error?.statusCode ?? null;
 
-    if (status === 401 || status === 403) {
+    if (code === "user_not_found" || code === 403 || code === 401) {
       return { status: null, error: "no-user", userId: currentUserId };
     }
     return { status: null, error: "other", userId: currentUserId };
   }
+
   if (!data) {
     return { status: null, error: "no-user", userId: currentUserId };
   }
+
   return { status: data.status, error: null, userId: currentUserId };
 };

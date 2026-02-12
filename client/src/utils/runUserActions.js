@@ -1,4 +1,3 @@
-
 import { checkUserStatus } from "./checkUserStatus";
 import { userActions } from "./userActions";
 
@@ -6,11 +5,9 @@ import { userActions } from "./userActions";
 export const runUserAction =
   (context) =>
   async (actionId, selectedUsers = []) => {
-    const { navigate, setAlert = () => {} } = context || {};
-
     // note: check the current user blocked or not, then run the action
-    const ok = await checkUserStatus(navigate, setAlert);
-    if (!ok) {
+    const check = await checkUserStatus();
+    if (!check.ok) {
       return undefined;
     }
 
@@ -21,9 +18,8 @@ export const runUserAction =
     }
 
     try {
-      const result = await action({ ...context, selectedUsers });
-      return result;
-    } catch (err) {
+      return await action({ ...context, selectedUsers });
+    } catch {
       return undefined;
     }
   };

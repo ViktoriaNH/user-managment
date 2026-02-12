@@ -1,38 +1,32 @@
-import { ACTION_EVENTS } from "../data/action-events";
-import { ACTION_MESSAGES } from "../data/action-messages";
-import { redirectToLogin } from "./redirectToLogin";
 import { getCurrentUserStatus } from "./getCurrentUserStatus";
 
-// note: check the current user is not blocked and exists.
-export const checkUserStatus = async (
-  navigate,
-  setAlert = () => {},
-  delay = 2000,
-) => {
+export const checkUserStatus = async () => {
   const { status, error } = await getCurrentUserStatus();
 
-  // important: SB auth state is still initializing
+  // important: auth state is not resolved yet, session restoring. Don't redirect til SB finishes initialization
   if (error === "pending") {
-  return true; // note: just wait, dont redirect. dont broken ui
-}
+    return { ok: true };
+  }
 
-  if (error === "no-user") {
-    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]);
-    await redirectToLogin(navigate, delay);
-    return false;
+  const errorCode = error?.code;
+  const errorStatus = error?.status || error?.statusCode;
+
+  if (
+    error === "no-user" ||
+    errorCode === "user_not_found" ||
+    errorStatus === 401 ||
+    errorStatus === 403
+  ) {
+    return { ok: false, reason: "no-user" };
   }
 
   if (error) {
-    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_DELETED]);
-    await redirectToLogin(navigate, delay);
-    return false;
+    return { ok: false, reason: "error" };
   }
 
   if (status === "blocked") {
-    setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_BLOCKED]);
-    await redirectToLogin(navigate, delay);
-    return false;
+    return { ok: false, reason: "blocked" };
   }
 
-  return true;
+  return { ok: true };
 };

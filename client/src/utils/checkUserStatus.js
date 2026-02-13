@@ -16,9 +16,5 @@ export const checkUserStatus = async () => {
     return { ok: false, reason: "blocked" };
   }
 
-  if (error) {
-    return { ok: false, reason: "error" };
-  }
-
   return { ok: true };
 };

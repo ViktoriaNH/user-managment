@@ -11,6 +11,26 @@ export const getCurrentUserStatus = async () => {
     return { status: null, error: "pending", userId: null };
   }
 
+  try {
+    currentUserId = await getCurrentUserId();
+  } catch (e) {
+    const msg = (e?.message || "").toLowerCase();
+
+    if (msg.includes("pending") || msg.includes("no-session")) {
+      return { status: null, error: "pending", userId: null };
+    }
+
+    if (msg.includes("user from sub claim") || msg.includes("not exist")) {
+      return { status: null, error: "no-user", userId: null };
+    }
+
+    return { status: null, error: "other", userId: null };
+  }
+
+  if (!currentUserId) {
+    return { status: null, error: "pending", userId: null };
+  }
+
   // note: get data from users
   const { data, error } = await supabase
     .from("users")

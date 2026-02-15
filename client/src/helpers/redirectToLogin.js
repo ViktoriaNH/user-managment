@@ -1,3 +1,5 @@
+import { supabase } from "../supabaseClient";
+
 // note: log out current user and redirect to login
 let redirectCalled = false;
 

@@ -53,6 +53,10 @@ const AuthForm = ({ mode }) => {
     resetForm();
   }, [mode]);
 
+  useEffect(() => {
+  redirectCalled = false;     
+}, []);
+
   return (
     <form onSubmit={handleSubmit} className="border rounded p-4 shadow-sm ">
       <h5 className="mb-3">{config.title}</h5>

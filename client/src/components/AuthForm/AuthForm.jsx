@@ -4,7 +4,8 @@ import Input from "../Input/Input";
 import Button from "../Button/Button";
 import Alert from "../Alert";
 import { useNavigate } from "react-router-dom";
-import { resetFormText } from '../../helpers/resetFormText'
+import { resetFormText } from "../../helpers/resetFormText";
+import { resetRedirectFlag } from "../../utils/checkStatusAndRedirect";
 
 const AuthForm = ({ mode }) => {
   const config = AUTH_MODE_CONFIG[mode];
@@ -54,8 +55,8 @@ const AuthForm = ({ mode }) => {
   }, [mode]);
 
   useEffect(() => {
-  redirectCalled = false;     
-}, []);
+    resetRedirectFlag();
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="border rounded p-4 shadow-sm ">

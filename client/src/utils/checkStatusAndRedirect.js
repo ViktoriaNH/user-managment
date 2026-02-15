@@ -7,6 +7,10 @@ import { checkUserStatus } from "./checkUserStatus";
 const PROJECT_REF = "kxuqrtxvyyubnsunrcpg";
 let redirectCalled = false;
 
+export const resetRedirectFlag = () => {
+  redirectCalled = false;
+};
+
 export const checkStatusAndRedirect = async (
   navigate,
   setAlert = () => {},

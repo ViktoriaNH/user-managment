@@ -7,7 +7,9 @@ export const runUserAction =
   async (actionId, selectedUsers = []) => {
     // note: check the current user blocked or not, then run the action
     const check = await checkUserStatus();
+
     if (!check.ok) {
+      await checkStatusAndRedirect(context.navigate, context.setAlert);
       return undefined;
     }
 

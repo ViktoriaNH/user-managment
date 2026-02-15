@@ -14,9 +14,9 @@ const Dashboard = () => {
   const { currentPage, totalPages, setCurrentPage, paginatedItems } =
     usePagination(users, 5);
      console.log("Dashboard mounted");
+     
   return (
     <>
-   
       <Header />
       <main className="container">
         <Greeting />

@@ -72,10 +72,27 @@ export const registerUser = async (email, password, name) => {
   }
 };
 
-// note: return user's id
+// note: return user's id and catch "no-user"
 export const getCurrentUserId = async () => {
-  const { data } = await supabase.auth.getUser();
-  return data?.user?.id;
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    const msg = (error.message || "").toLowerCase();
+
+    // КРИТИЧНО: пользователь удалён, но JWT ещё есть
+    if (
+      msg.includes("user from sub claim") ||
+      msg.includes("not exist") ||
+      msg.includes("user_not_found")
+    ) {
+      throw new Error("user_not_found");
+    }
+
+    throw error;
+  }
+
+  return data?.user?.id ?? null;
 };
+
 
 

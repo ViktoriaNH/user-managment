@@ -2,7 +2,6 @@ import { ACTION_EVENTS } from "../data/action-events";
 import { ACTION_MESSAGES } from "../data/action-messages";
 import { redirectToLogin } from "../helpers/redirectToLogin";
 
-
 // note: handles the result of a user status check
 export const handleCheckResult = (check, navigate, setAlert, delay = 2000) => {
   if (check.ok) return true;

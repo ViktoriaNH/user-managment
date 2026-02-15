@@ -12,17 +12,6 @@ const useUsers = (delay = 2000) => {
   const [alert, setAlert] = useState(null);
   const navigate = useNavigate();
 
-  // note: check if current user is blocked, redirect if needed
-  useEffect(() => {
-    checkStatusAndRedirect(navigate, setAlert);
-
-    const interval = setInterval(() => {
-      checkStatusAndRedirect(navigate, setAlert);
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [navigate, setAlert]);
-
   // note: reload user list
   const reload = useCallback(async () => {
     const check = await checkUserStatus();

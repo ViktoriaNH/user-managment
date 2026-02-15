@@ -12,19 +12,21 @@ export const checkStatusAndRedirect = async (
   setAlert = () => {},
   delay = 2000,
 ) => {
-  if (redirectCalled) return;
-
   const check = await checkUserStatus();
 
   const doRedirect = () => {
-    redirectToLogin(navigate, delay);
+    if (!redirectCalled) {
+      redirectCalled = true;
+      redirectToLogin(navigate, delay);
+    } else {
+      console.debug("Redirect already called, skipping duplicate redirect");
+    }
   };
 
   if (check.ok) return;
 
   if (check.reason === "blocked") {
     setAlert(ACTION_MESSAGES[ACTION_EVENTS.SELF_BLOCKED]);
-    redirectCalled = true;
     doRedirect();
     return;
   }
@@ -44,8 +46,7 @@ export const checkStatusAndRedirect = async (
       console.warn("Failed to remove auth token", e);
     }
 
-    redirectCalled = true;
-    redirectToLogin(navigate, delay);
+    doRedirect();
     return;
   }
 };

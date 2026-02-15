@@ -21,7 +21,7 @@ const useUsers = (delay = 2000) => {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [navigate]);
+  }, [navigate, setAlert]);
 
   // note: reload user list
   const reload = useCallback(async () => {
@@ -37,7 +37,7 @@ const useUsers = (delay = 2000) => {
     } catch (error) {
       setAlert?.("Failed to load list");
     }
-  }, []);
+  }, [navigate, setAlert]);
 
   // note: initial load
   useEffect(() => {

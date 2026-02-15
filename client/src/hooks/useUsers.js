@@ -55,6 +55,13 @@ const useUsers = (delay = 2000) => {
   const handleToolbarAction = async (actionId) => {
     let event = null;
 
+    const check = await checkUserStatus();
+
+    if (!check.ok) {
+      checkStatusAndRedirect(navigate, setAlert);
+      return;
+    }
+
     try {
       // note: runUserAction handles the actual action and returns event
       event = await runUserAction({

@@ -58,10 +58,7 @@ export const userActions = {
       throw err;
     }
 
-    // note: if deleted self, dtay on the page
-    if (!isSelf) {
-      await reload();
-    }
+    await reload();
 
     return isSelf ? ACTION_EVENTS.SELF_DELETED : ACTION_EVENTS.USERS_DELETED;
   },
@@ -81,9 +78,7 @@ export const userActions = {
     //  note: check we delete self or not
     const isSelf = result?.requested?.includes(currentUserId);
 
-    if (!isSelf) {
-      await reload();
-    }
+    await reload();
 
     return isSelf ?
         ACTION_EVENTS.SELF_DELETED

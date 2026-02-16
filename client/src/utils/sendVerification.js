@@ -11,9 +11,6 @@ export const sendVerification = async (userId, email) => {
   // note: return response data on success
   const data = await res.json();
 
-  console.log("[sendVerification] status:", res.status);
-  console.log("[sendVerification] response:", data);
-
   // note: throw error if backend response is not ok
 
   if (!res.ok) {

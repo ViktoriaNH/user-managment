@@ -14,19 +14,13 @@ const useUsers = (delay = 2000) => {
 
   // note: reload user list
   const reload = useCallback(async () => {
-    const check = await checkUserStatus();
-
-    if (!check.ok) {
-      checkStatusAndRedirect(navigate, setAlert);
-      return;
-    }
     try {
       const data = await loadUsers();
       setUsers(data);
     } catch (error) {
       setAlert?.("Failed to load list");
     }
-  }, [navigate, setAlert]);
+  }, [setAlert]);
 
   // note: initial load
   useEffect(() => {
